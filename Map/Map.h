@@ -21,103 +21,128 @@ public:
     using size_type = std::size_t;
     using difference_type = std::ptrdiff_t;
     using key_compare = Compare;
-    using reference = value_type &;
-    using const_reference = const value_type &;
-    using pointer = value_type *;
-    using const_pointer = const value_type *;
+    using reference = value_type&;
+    using const_reference = const value_type&;
+    using pointer = value_type*;
+    using const_pointer = const value_type*;
     using iterator = Iterator;
     using const_iterator = ConstIterator;
 
     Map()
-        : root(nullptr), b_iter(Iterator(nullptr)), e_iter(Iterator(nullptr)), size(0),
-          comparator(Compare()) {}
+        : root_(nullptr),
+          b_iter_(Iterator(nullptr)),
+          e_iter_(Iterator(nullptr)),
+          size_(0),
+          comparator_(Compare()) {}
 
-    Map(const Map &other)
-        : root(other.root == nullptr ? nullptr : new Node(*other.root)),
-          b_iter(Iterator(beginNode(root))), e_iter(nullptr), size(other.size),
-          comparator(Compare()) {}
+    Map(const Map& other)
+        : root_(other.root_ == nullptr ? nullptr : new Node(*other.root_)),
+          b_iter_(Iterator(beginNode(root_))),
+          e_iter_(nullptr),
+          size_(other.size_),
+          comparator_(Compare()) {}
 
-    Map &operator=(const Map &other) {
+    Map& operator=(const Map& other) {
         if (this != &other) {
-            delete root;
-            root = nullptr;
-            size = 0;
-            b_iter = Iterator(nullptr);
-            if (other.root != nullptr) {
-                root = new Node(*other.root);
-                b_iter = Iterator(beginNode(root));
-                size = other.size;
+            delete root_;
+            root_ = nullptr;
+            size_ = 0;
+            b_iter_ = Iterator(nullptr);
+            if (other.root_ != nullptr) {
+                root_ = new Node(*other.root_);
+                b_iter_ = Iterator(beginNode(root_));
+                size_ = other.size_;
             }
         }
         return *this;
     }
 
-    Map(Map &&other) noexcept
-        : root(other.root), b_iter(other.b_iter), e_iter(nullptr), size(other.size),
-          comparator(Compare()) {
-        other.root = nullptr;
-        other.b_iter = Iterator(nullptr);
-        other.size = 0;
+    Map(Map&& other) noexcept
+        : root_(other.root_),
+          b_iter_(other.b_iter_),
+          e_iter_(nullptr),
+          size_(other.size_),
+          comparator_(Compare()) {
+        other.root_ = nullptr;
+        other.b_iter_ = Iterator(nullptr);
+        other.size_ = 0;
     }
 
-    Map &operator=(Map &&other) noexcept {
+    Map& operator=(Map&& other) noexcept {
         if (this != &other) {
-            root = other.root;
-            b_iter = other.b_iter;
-            size = other.size;
-            other.root = nullptr;
-            other.b_iter = Iterator(nullptr);
-            other.size = 0;
+            root_ = other.root_;
+            b_iter_ = other.b_iter_;
+            size_ = other.size_;
+            other.root_ = nullptr;
+            other.b_iter_ = Iterator(nullptr);
+            other.size_ = 0;
         }
         return *this;
     }
 
     ~Map() {
-        delete root;
-        root = nullptr;
-        b_iter = Iterator(nullptr);
-        size = 0;
+        delete root_;
+        root_ = nullptr;
+        b_iter_ = Iterator(nullptr);
+        size_ = 0;
     }
 
     // Iterators
-    [[nodiscard]] iterator begin() noexcept { return b_iter; }
+    [[nodiscard]] iterator begin() noexcept {
+        return b_iter_;
+    }
 
-    [[nodiscard]] const_iterator begin() const noexcept { return ConstIterator(b_iter); }
+    [[nodiscard]] const_iterator begin() const noexcept {
+        return ConstIterator(b_iter_);
+    }
 
-    [[nodiscard]] const_iterator cbegin() const noexcept { return ConstIterator(b_iter); }
+    [[nodiscard]] const_iterator cbegin() const noexcept {
+        return ConstIterator(b_iter_);
+    }
 
-    [[nodiscard]] iterator end() noexcept { return e_iter; }
+    [[nodiscard]] iterator end() noexcept {
+        return e_iter_;
+    }
 
-    [[nodiscard]] const_iterator end() const noexcept { return ConstIterator(e_iter); }
+    [[nodiscard]] const_iterator end() const noexcept {
+        return ConstIterator(e_iter_);
+    }
 
-    [[nodiscard]] const_iterator cend() const noexcept { return ConstIterator(e_iter); }
+    [[nodiscard]] const_iterator cend() const noexcept {
+        return ConstIterator(e_iter_);
+    }
 
     // Capacity
-    [[nodiscard]] bool empty() const noexcept { return size == 0; }
+    [[nodiscard]] bool empty() const noexcept {
+        return size_ == 0;
+    }
 
-    [[nodiscard]] size_type getSize() const noexcept { return size; }
+    [[nodiscard]] size_type getSize() const noexcept {
+        return size_;
+    }
 
     // Modifiers
 
-    // Return a pair consisting of an iterator to the inserted element (or to the element that
-    // prevented the insertion) and a bool value set to true if and only if the insertion took
-    // place.
+    // Return a pair consisting of an iterator to the inserted element (or to
+    // the element that prevented the insertion) and a bool value set to true if
+    // and only if the insertion took place.
     std::pair<iterator, bool> insert(const_reference value) {
-        Node *parent = findParent(value.first);
+        Node* parent = findParent(value.first);
         if ((parent != nullptr) && (parent->value->first == value.first)) {
-            return std::pair{Iterator(parent), false};
+            return std::pair<iterator, bool>{Iterator(parent), false};
         }
-        Node *new_node = new Node({new value_type(value), nullptr, nullptr, parent, 1});
-        ++size;
+        Node* new_node =
+            new Node({new value_type(value), nullptr, nullptr, parent, 1});
+        ++size_;
         if (parent == nullptr) {
-            root = new_node;
-            b_iter = Iterator(root);
+            root_ = new_node;
+            b_iter_ = Iterator(root_);
         } else {
-            if (comparator(value.first, b_iter->first)) {
-                b_iter = Iterator(new_node);
+            if (comparator_(value.first, b_iter_->first)) {
+                b_iter_ = Iterator(new_node);
             }
-            Node *rebalance_node = nullptr;
-            if (comparator(value.first, parent->value->first)) {
+            Node* rebalance_node = nullptr;
+            if (comparator_(value.first, parent->value->first)) {
                 parent->left = new_node;
                 rebalance_node = parent;
             } else {
@@ -128,7 +153,8 @@ public:
             bool is_tree_changed = false;
             while ((rebalance_node != nullptr) && (unchanged_nodes < 3)) {
                 is_tree_changed = rebalance_node != skew(rebalance_node);
-                is_tree_changed = is_tree_changed || rebalance_node != split(rebalance_node);
+                is_tree_changed =
+                    is_tree_changed || rebalance_node != split(rebalance_node);
                 if (!is_tree_changed) {
                     ++unchanged_nodes;
                 } else {
@@ -137,25 +163,26 @@ public:
                 rebalance_node = rebalance_node->parent;
             }
         }
-        return std::pair{Iterator(new_node), true};
+        return std::pair<iterator, bool>{Iterator(new_node), true};
     }
 
-    std::pair<iterator, bool> insert(value_type &&value) {
-        Node *parent = findParent(value.first);
+    std::pair<iterator, bool> insert(value_type&& value) {
+        Node* parent = findParent(value.first);
         if ((parent != nullptr) && (parent->value->first == value.first)) {
-            return std::pair{Iterator(parent), false};
+            return std::pair<iterator, bool>{Iterator(parent), false};
         }
-        Node *new_node = new Node({new value_type(std::move(value)), nullptr, nullptr, parent, 1});
-        ++size;
+        Node* new_node = new Node(
+            {new value_type(std::move(value)), nullptr, nullptr, parent, 1});
+        ++size_;
         if (parent == nullptr) {
-            root = new_node;
-            b_iter = Iterator(root);
+            root_ = new_node;
+            b_iter_ = Iterator(root_);
         } else {
-            if (comparator(value.first, b_iter->first)) {
-                b_iter = Iterator(new_node);
+            if (comparator_(value.first, b_iter_->first)) {
+                b_iter_ = Iterator(new_node);
             }
-            Node *rebalance_node = nullptr;
-            if (comparator(value.first, parent->value->first)) {
+            Node* rebalance_node = nullptr;
+            if (comparator_(value.first, parent->value->first)) {
                 parent->left = new_node;
                 rebalance_node = parent;
             } else {
@@ -166,7 +193,8 @@ public:
             bool is_tree_changed = false;
             while ((rebalance_node != nullptr) && (unchanged_nodes < 3)) {
                 is_tree_changed = rebalance_node != skew(rebalance_node);
-                is_tree_changed = is_tree_changed || rebalance_node != split(rebalance_node);
+                is_tree_changed =
+                    is_tree_changed || rebalance_node != split(rebalance_node);
                 if (!is_tree_changed) {
                     ++unchanged_nodes;
                 } else {
@@ -175,26 +203,31 @@ public:
                 rebalance_node = rebalance_node->parent;
             }
         }
-        return std::pair{Iterator(new_node), true};
+        return std::pair<iterator, bool>{Iterator(new_node), true};
     }
 
     // TODO change function signature
-    void erase(const key_type &erased_key) noexcept {
-        if (root == nullptr) {
+    void erase(const key_type& erased_key) noexcept {
+        if (root_ == nullptr) {
             return;
         }
-        Node *current_node = findNode(erased_key);
+        Node* current_node = findNode(erased_key);
         if (current_node != nullptr) {
-            Node *rebalance_node = nullptr;
-            if (current_node->left == nullptr && current_node->right == nullptr) {
+            Node* rebalance_node = nullptr;
+            if (current_node->left == nullptr &&
+                current_node->right == nullptr) {
                 rebalance_node = trivialNodeErase(current_node, nullptr);
-            } else if (current_node->left != nullptr && current_node->right == nullptr) {
-                rebalance_node = trivialNodeErase(current_node, current_node->left);
-            } else if (current_node->left == nullptr && current_node->right != nullptr) {
-                rebalance_node = trivialNodeErase(current_node, current_node->right);
+            } else if (current_node->left != nullptr &&
+                       current_node->right == nullptr) {
+                rebalance_node =
+                    trivialNodeErase(current_node, current_node->left);
+            } else if (current_node->left == nullptr &&
+                       current_node->right != nullptr) {
+                rebalance_node =
+                    trivialNodeErase(current_node, current_node->right);
             } else {
-                Node *next_node = next(current_node);
-                Node *right_child = next_node->right;
+                Node* next_node = next(current_node);
+                Node* right_child = next_node->right;
                 rebalance_node = next_node->parent;
                 if (right_child != nullptr) {
                     right_child->parent = rebalance_node;
@@ -205,8 +238,9 @@ public:
                     rebalance_node->right = right_child;
                 }
                 std::swap(current_node->value, next_node->value);
-                current_node->value->second = std::move(next_node->value->second);
-                --size;
+                current_node->value->second =
+                    std::move(next_node->value->second);
+                --size_;
                 next_node->left = nullptr;
                 next_node->right = nullptr;
                 next_node->parent = nullptr;
@@ -236,35 +270,45 @@ public:
     }
 
     // Lookup
-    iterator find(const key_type &search_key) noexcept { return Iterator(findNode(search_key)); }
+    iterator find(const key_type& search_key) noexcept {
+        return Iterator(findNode(search_key));
+    }
 
-    const_iterator find(const key_type &search_key) const noexcept {
+    const_iterator find(const key_type& search_key) const noexcept {
         return ConstIterator(findNode(search_key));
     }
 
-    [[nodiscard]] bool contains(const key_type &key) const noexcept {
+    [[nodiscard]] bool contains(const key_type& key) const noexcept {
         return findNode(key) != nullptr;
     }
 
 private:
-    Node *root;
-    iterator b_iter;
-    iterator e_iter;
-    size_type size;
-    key_compare comparator;
+    Node* root_;
+    iterator b_iter_;
+    iterator e_iter_;
+    size_type size_;
+    key_compare comparator_;
 
     struct Node {
         Map::pointer value;
-        Node *left;
-        Node *right;
-        Node *parent;
+        Node* left;
+        Node* right;
+        Node* parent;
         Map::size_type level;
 
-        Node(Map::pointer value, Node *left, Node *right, Node *parent, Map::size_type level)
-            : value(value), left(left), right(right), parent(parent), level(level) {}
+        Node(Map::pointer value, Node* left, Node* right, Node* parent,
+             Map::size_type level)
+            : value(value),
+              left(left),
+              right(right),
+              parent(parent),
+              level(level) {}
 
-        Node(const Node &other)
-            : value(new value_type(*(other.value))), left(nullptr), right(nullptr), parent(nullptr),
+        Node(const Node& other)
+            : value(new value_type(*(other.value))),
+              left(nullptr),
+              right(nullptr),
+              parent(nullptr),
               level(other.level) {
             if (other.left != nullptr) {
                 left = new Node(*other.left);
@@ -299,25 +343,31 @@ private:
         using reference = Map::reference;
         using pointer = Map::pointer;
 
-        explicit Iterator(Node *ptr) noexcept : ptr(ptr){};
+        explicit Iterator(Node* ptr) noexcept
+            : ptr_(ptr){};
 
-        Iterator(const Iterator &other) noexcept : ptr(other.ptr){};
+        Iterator(const Iterator& other) noexcept
+            : ptr_(other.ptr_){};
 
-        Iterator &operator=(const Iterator &other) &noexcept {
+        Iterator& operator=(const Iterator& other) & noexcept {
             if (this != &other) {
-                ptr = other.ptr;
+                ptr_ = other.ptr_;
             }
             return *this;
         }
 
         ~Iterator(){};
 
-        [[nodiscard]] reference operator*() const noexcept { return *(ptr->value); }
+        [[nodiscard]] reference operator*() const noexcept {
+            return *(ptr_->value);
+        }
 
-        [[nodiscard]] pointer operator->() const noexcept { return ptr->value; }
+        [[nodiscard]] pointer operator->() const noexcept {
+            return ptr_->value;
+        }
 
-        Iterator &operator++() {
-            ptr = Map::next(ptr);
+        Iterator& operator++() {
+            ptr_ = Map::next(ptr_);
             return *this;
         }
 
@@ -327,8 +377,8 @@ private:
             return tmp;
         }
 
-        Iterator &operator--() {
-            ptr = Map::prev(ptr);
+        Iterator& operator--() {
+            ptr_ = Map::prev(ptr_);
             return *this;
         }
 
@@ -338,16 +388,16 @@ private:
             return tmp;
         }
 
-        [[nodiscard]] bool operator==(const Iterator &right) const noexcept {
-            return ptr == right.ptr;
+        [[nodiscard]] bool operator==(const Iterator& right) const noexcept {
+            return ptr_ == right.ptr_;
         }
 
-        [[nodiscard]] bool operator!=(const Iterator &right) const noexcept {
-            return ptr != right.ptr;
+        [[nodiscard]] bool operator!=(const Iterator& right) const noexcept {
+            return ptr_ != right.ptr_;
         }
 
     private:
-        Node *ptr;
+        Node* ptr_;
     };
 
     class ConstIterator {
@@ -358,27 +408,34 @@ private:
         using reference = Map::const_reference;
         using pointer = Map::const_pointer;
 
-        explicit ConstIterator(Node *ptr) noexcept : ptr(ptr){};
+        explicit ConstIterator(Node* ptr) noexcept
+            : ptr_(ptr){};
 
-        explicit ConstIterator(const Iterator &other) noexcept : ptr(other.ptr){};
+        explicit ConstIterator(const Iterator& other) noexcept
+            : ptr_(other.ptr_){};
 
-        ConstIterator(const ConstIterator &other) noexcept : ptr(other.ptr){};
+        ConstIterator(const ConstIterator& other) noexcept
+            : ptr_(other.ptr_){};
 
-        ConstIterator &operator=(const ConstIterator &other) &noexcept {
+        ConstIterator& operator=(const ConstIterator& other) & noexcept {
             if (this != &other) {
-                ptr = other.ptr;
+                ptr_ = other.ptr_;
             }
             return *this;
         }
 
         ~ConstIterator(){};
 
-        [[nodiscard]] reference operator*() const noexcept { return *(ptr->value); }
+        [[nodiscard]] reference operator*() const noexcept {
+            return *(ptr_->value);
+        }
 
-        [[nodiscard]] pointer operator->() const noexcept { return ptr->value; }
+        [[nodiscard]] pointer operator->() const noexcept {
+            return ptr_->value;
+        }
 
-        ConstIterator &operator++() {
-            ptr = Map::next(ptr);
+        ConstIterator& operator++() {
+            ptr_ = Map::next(ptr_);
             return *this;
         }
 
@@ -388,8 +445,8 @@ private:
             return tmp;
         }
 
-        ConstIterator &operator--() {
-            ptr = Map::prev(ptr);
+        ConstIterator& operator--() {
+            ptr_ = Map::prev(ptr_);
             return *this;
         }
 
@@ -399,23 +456,25 @@ private:
             return tmp;
         }
 
-        [[nodiscard]] bool operator==(const ConstIterator &right) const noexcept {
-            return ptr == right.ptr;
+        [[nodiscard]] bool operator==(
+            const ConstIterator& right) const noexcept {
+            return ptr_ == right.ptr_;
         }
 
-        [[nodiscard]] bool operator!=(const ConstIterator &right) const noexcept {
-            return ptr != right.ptr;
+        [[nodiscard]] bool operator!=(
+            const ConstIterator& right) const noexcept {
+            return ptr_ != right.ptr_;
         }
 
     private:
-        Node *ptr;
+        Node* ptr_;
     };
 
-    Node *skew(Node *node) noexcept {
+    Node* skew(Node* node) noexcept {
         if ((node->left == nullptr) || (node->level != node->left->level)) {
             return node;
         }
-        Node *left_node = node->left;
+        Node* left_node = node->left;
         node->left = left_node->right;
         if (left_node->right != nullptr) {
             left_node->right->parent = node;
@@ -430,18 +489,18 @@ private:
             }
         }
         node->parent = left_node;
-        if (root == node) {
-            root = left_node;
+        if (root_ == node) {
+            root_ = left_node;
         }
         return left_node;
     }
 
-    Node *split(Node *node) noexcept {
+    Node* split(Node* node) noexcept {
         if (node->right == nullptr || node->right->right == nullptr ||
             node->level != node->right->right->level) {
             return node;
         }
-        Node *right_node = node->right;
+        Node* right_node = node->right;
         node->right = right_node->left;
         if (right_node->left != nullptr) {
             right_node->left->parent = node;
@@ -456,8 +515,8 @@ private:
             }
         }
         node->parent = right_node;
-        if (root == node) {
-            root = right_node;
+        if (root_ == node) {
+            root_ = right_node;
         }
         ++right_node->level;
         return right_node;
@@ -465,12 +524,13 @@ private:
 
     // Deleting a node in case of less than two children
     // return parent of erased node
-    [[nodiscard]] Node *trivialNodeErase(Node *node_to_erase, Node *child) noexcept {
+    [[nodiscard]] Node* trivialNodeErase(Node* node_to_erase,
+                                         Node* child) noexcept {
         if (child != nullptr) {
             child->parent = node_to_erase->parent;
         }
-        Node *parent = nullptr;
-        if (root != node_to_erase) {
+        Node* parent = nullptr;
+        if (root_ != node_to_erase) {
             parent = node_to_erase->parent;
             if (parent->left == node_to_erase) {
                 parent->left = child;
@@ -478,12 +538,12 @@ private:
                 parent->right = child;
             }
         } else {
-            root = child;
+            root_ = child;
         }
-        if (b_iter == Iterator(node_to_erase)) {
-            ++b_iter;
+        if (b_iter_ == Iterator(node_to_erase)) {
+            ++b_iter_;
         }
-        --size;
+        --size_;
         node_to_erase->left = nullptr;
         node_to_erase->right = nullptr;
         node_to_erase->parent = nullptr;
@@ -491,10 +551,13 @@ private:
         return parent;
     }
 
-    void static decreaseNodeLevel(Node *node) noexcept {
-        size_type left_diff = node->left != nullptr ? node->level - node->left->level : node->level;
-        size_type right_diff =
-            node->right != nullptr ? node->level - node->right->level : node->level;
+    void static decreaseNodeLevel(Node* node) noexcept {
+        size_type left_diff = node->left != nullptr
+                                  ? node->level - node->left->level
+                                  : node->level;
+        size_type right_diff = node->right != nullptr
+                                   ? node->level - node->right->level
+                                   : node->level;
         if (left_diff > 1 || right_diff > 1) {
             if (node->right != nullptr && node->right->level == node->level) {
                 --node->right->level;
@@ -503,15 +566,15 @@ private:
         }
     }
 
-    [[nodiscard]] static Node *next(const Node *node) noexcept {
+    [[nodiscard]] static Node* next(const Node* node) noexcept {
         if (node->right != nullptr) {
-            Node *current_node = node->right;
+            Node* current_node = node->right;
             while (current_node->left != nullptr) {
                 current_node = current_node->left;
             }
             return current_node;
         }
-        Node *parent = node->parent;
+        Node* parent = node->parent;
         while (parent != nullptr && (parent->right == node)) {
             node = parent;
             parent = node->parent;
@@ -519,15 +582,15 @@ private:
         return parent;
     }
 
-    [[nodiscard]] static Node *prev(const Node *node) noexcept {
+    [[nodiscard]] static Node* prev(const Node* node) noexcept {
         if (node->left != nullptr) {
-            Node *current_node = node->left;
+            Node* current_node = node->left;
             while (current_node->right != nullptr) {
                 current_node = current_node->right;
             }
             return current_node;
         }
-        Node *parent = node->parent;
+        Node* parent = node->parent;
         while (parent != nullptr && (parent->left == node)) {
             node = parent;
             parent = node->parent;
@@ -535,16 +598,18 @@ private:
         return parent;
     }
 
-    // return a pointer to the node containing the key, return nullptr if such a key does not exist
+    // return a pointer to the node containing the key, return nullptr if such a
+    // key does not exist
     // TODO add noexcept condition for Compare class
-    [[nodiscard]] Node *findNode(const key_type &search_key) const noexcept {
-        Node *node = root;
+    [[nodiscard]] Node* findNode(const key_type& search_key) const noexcept {
+        Node* node = root_;
         while (node != nullptr) {
             const key_type key = node->value->first;
-            if (!(comparator(key, search_key)) && !(comparator(search_key, key))) {
+            if (!(comparator_(key, search_key)) &&
+                !(comparator_(search_key, key))) {
                 break;
             }
-            if (comparator(search_key, key)) {
+            if (comparator_(search_key, key)) {
                 node = node->left;
             } else {
                 node = node->right;
@@ -553,31 +618,32 @@ private:
         return node;
     }
 
-    // return a pointer to the node containing the key, otherwise return the parent of the new
-    // inserted node (return nullptr if map is empty)
-    [[nodiscard]] Node *findParent(const key_type &search_key) const noexcept {
-        Node *parent = nullptr;
-        Node *node = root;
+    // return a pointer to the node containing the key, otherwise return the
+    // parent of the new inserted node (return nullptr if map is empty)
+    [[nodiscard]] Node* findParent(const key_type& search_key) const noexcept {
+        Node* parent = nullptr;
+        Node* node = root_;
         while (node != nullptr) {
             parent = node;
             const key_type key = node->value->first;
-            if (!(comparator(key, search_key)) && !(comparator(search_key, key))) {
+            if (!(comparator_(key, search_key)) &&
+                !(comparator_(search_key, key))) {
                 break;
             }
-            if (comparator(search_key, key)) {
+            if (comparator_(search_key, key)) {
                 node = node->left;
             } else {
                 node = node->right;
             }
         }
-        if (node != nullptr || size == 0) {
+        if (node != nullptr || size_ == 0) {
             return node;
         }
         return parent;
     }
 
     // Pointer to leftmost node
-    [[nodiscard]] static Node *beginNode(Node *node) noexcept {
+    [[nodiscard]] static Node* beginNode(Node* node) noexcept {
         if (node == nullptr) {
             return nullptr;
         }
@@ -588,4 +654,4 @@ private:
     }
 };
 
-#endif // IS_BTREE_MAP
+#endif  // IS_BTREE_MAP
