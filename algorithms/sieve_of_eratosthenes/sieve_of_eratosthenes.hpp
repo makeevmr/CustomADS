@@ -1,0 +1,8 @@
+#ifndef CUSTOMADS_ALGORITHMS_SIEVE_OF_ERATOSTHENES
+#define CUSTOMADS_ALGORITHMS_SIEVE_OF_ERATOSTHENES
+
+#include <vector>
+
+std::vector<bool> getPrimeNumbers(const int& n);
+
+#endif  // CUSTOMADS_ALGORITHMS_SIEVE_OF_ERATOSTHENES
