@@ -3,11 +3,9 @@
 
 #include <stdexcept>
 
-class ExcThrowClass {
-private:
-  static unsigned int created_objects;
-  int* data_;
+namespace ads {
 
+class ExcThrowClass {
 public:
   ExcThrowClass() {
     ++created_objects;
@@ -62,8 +60,14 @@ public:
     --created_objects;
     delete[] data_;
   }
+
+private:
+  static unsigned int created_objects;
+  int* data_;
 };
 
 unsigned int ExcThrowClass::created_objects = 0;
+
+}  // namespace ads
 
 #endif  // CUSTOMADS_DATA_STRUCTURES_MIN_MAX_QUEUE_EXC_THROW_CLASS_HPP_

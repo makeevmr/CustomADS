@@ -3,6 +3,8 @@
 
 #include <vector>
 
+namespace ads {
+
 template <typename T, typename BinaryOperation, T kNeutralElement>
 class SimpleSegmentTree {
 public:
@@ -61,5 +63,7 @@ private:
   size_t base_array_size_;
   std::vector<T> segment_tree_;
 };
+
+}  // namespace ads
 
 #endif  // CUSTOMADS_DATA_STRUCTURES_SIMPLE_SEGMENT_TREE_SIMPLE_SEGMENT_TREE_HPP_

@@ -3,6 +3,10 @@
 
 #include <vector>
 
+namespace ads {
+
 std::vector<bool> getPrimeNumbers(const int& n);
+
+}  // namespace ads
 
 #endif  // CUSTOMADS_ALGORITHMS_SIEVE_OF_ERATOSTHENES_SIEVE_OF_ERATOSTHENES_HPP_

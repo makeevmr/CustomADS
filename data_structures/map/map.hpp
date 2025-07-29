@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <iterator>
 
+namespace ads {
+
 // Implementation of map using AA Tree
 // The comparator must satisfy strict weak ordering relation
 // TODO try to implement custom Allocator
@@ -643,5 +645,7 @@ private:
     return node;
   }
 };
+
+}  // namespace ads
 
 #endif  // CUSTOMADS_DATA_STRUCTURES_MAP_MAP_HPP_

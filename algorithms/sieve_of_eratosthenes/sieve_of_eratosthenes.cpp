@@ -1,5 +1,7 @@
 #include "sieve_of_eratosthenes.hpp"
 
+namespace ads {
+
 std::vector<bool> getPrimeNumbers(const int& n) {
   std::vector<bool> is_prime(n + 1, true);
   is_prime[0] = is_prime[1] = false;
@@ -12,3 +14,5 @@ std::vector<bool> getPrimeNumbers(const int& n) {
   }
   return is_prime;
 }
+
+}  // namespace ads

@@ -6,6 +6,8 @@
 
 #include "min_max_node.hpp"
 
+namespace ads {
+
 // Stack implementation with T* dynamic array
 template <typename T>
 class Stack {
@@ -227,5 +229,7 @@ public:
     }
   }
 };
+
+}  // namespace ads
 
 #endif  // CUSTOMADS_DATA_STRUCTURES_MIN_MAX_QUEUE_STACK_HPP_

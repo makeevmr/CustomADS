@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <type_traits>
 
+namespace ads {
+
 // Queue implementation on a ring buffer
 // If N > 0 then allocate memory on stack
 template <typename T, std::size_t N>
@@ -346,5 +348,7 @@ public:
     ++size_;
   }
 };
+
+}  // namespace ads
 
 #endif  // CUSTOMADS_DATA_STRUCTURES_QUEUE_QUEUE_HPP_

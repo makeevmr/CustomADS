@@ -3,6 +3,8 @@
 
 #include "stack.hpp"
 
+namespace ads {
+
 // Queue implementation using two stacks
 template <typename T>
 class Queue {
@@ -240,5 +242,7 @@ public:
     push_stack_.resize(new_capacity);
   }
 };
+
+}  // namespace ads
 
 #endif  // CUSTOMADS_DATA_STRUCTURES_MIN_MAX_QUEUE_QUEUE_HPP_

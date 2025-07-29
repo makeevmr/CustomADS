@@ -3,6 +3,8 @@
 
 #include <type_traits>
 
+namespace ads {
+
 template <typename T, typename Compare>
 class Heap {
 private:
@@ -74,5 +76,7 @@ public:
 
   void pop();
 };
+
+}  // namespace ads
 
 #endif  // CUSTOMADS_DATA_STRUCTURES_HEAP_HEAP_HEAP_HPP_

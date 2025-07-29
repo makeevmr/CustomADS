@@ -4,6 +4,8 @@
 
 #include "../compare/compare.hpp"
 
+namespace ads {
+
 template <typename T, typename Compare>
 void Heap<T, Compare>::swap(Heap<T, Compare>& other) noexcept {
   std::swap(data_, other.data_);
@@ -268,4 +270,6 @@ void Heap<T, Compare>::pop() {
   siftingDown(0);
 }
 
-template class Heap<int, MoreCompare<int>>;
+}  // namespace ads
+
+template class ads::Heap<int, ads::MoreCompare<int>>;
