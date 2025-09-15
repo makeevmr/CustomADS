@@ -5,7 +5,7 @@
 
 namespace ads {
 
-std::vector<bool> getPrimeNumbers(const int& n);
+[[nodiscard]] std::vector<bool> createEratoSieve(const std::size_t& n);
 
 }  // namespace ads
 
