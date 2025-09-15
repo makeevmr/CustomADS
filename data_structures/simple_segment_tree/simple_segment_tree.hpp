@@ -5,6 +5,10 @@
 
 namespace ads {
 
+// TODO add methods:
+// 1. To assign segment_tree_[ind] = new_value
+// 2. To assign new_value to all elements in segment_tree_[left, ..., right]
+// TODO try to use concepts to validate types: T, BinaryOperation
 template <typename T, typename BinaryOperation, T kNeutralElement>
 class SimpleSegmentTree {
 public:
