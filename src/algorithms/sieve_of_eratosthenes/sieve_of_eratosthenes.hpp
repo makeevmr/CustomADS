@@ -1,0 +1,12 @@
+#ifndef CUSTOMADS_SRC_ALGORITHMS_SIEVE_OF_ERATOSTHENES_SIEVE_OF_ERATOSTHENES_HPP_
+#define CUSTOMADS_SRC_ALGORITHMS_SIEVE_OF_ERATOSTHENES_SIEVE_OF_ERATOSTHENES_HPP_
+
+#include <vector>
+
+namespace ads {
+
+[[nodiscard]] std::vector<bool> createEratoSieve(const std::size_t& n);
+
+}  // namespace ads
+
+#endif  // CUSTOMADS_SRC_ALGORITHMS_SIEVE_OF_ERATOSTHENES_SIEVE_OF_ERATOSTHENES_HPP_
