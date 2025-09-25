@@ -3,20 +3,30 @@ BasedOnStyle: Google
 IndentWidth: 2
 ---
 Language: Cpp
-AllowShortFunctionsOnASingleLine: Empty
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLambdasOnASingleLine: Empty
-IncludeBlocks: Preserve
-SortIncludes: false
 
 ColumnLimit: 80
 AccessModifierOffset: -2
-AlwaysBreakTemplateDeclarations: true
-NamespaceIndentation: None
-
-DerivePointerAlignment: false
-PointerAlignment: Left
 PackConstructorInitializers: Never
+
+# AllowShort
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLambdasOnASingleLine: Empty
+
+# Breaks
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: AfterComma
+AlwaysBreakTemplateDeclarations: true
+
+# Includes
+IncludeBlocks: Preserve
+SortIncludes: false
+
+# Indent
+IndentRequiresClause: false
+NamespaceIndentation: None
+
+# Pointer
+DerivePointerAlignment: false
+PointerAlignment: Left
 ---
