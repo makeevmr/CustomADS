@@ -8,5 +8,5 @@ mkdir build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build . --target test_segment_tree
-./test_segment_tree
+./unittests/data_structures/test_segment_tree
 ```
