@@ -1,8 +1,13 @@
 #include "sieve_of_eratosthenes.hpp"
 
+#include <stdexcept>
+
 namespace ads {
 
 [[nodiscard]] std::vector<bool> createEratoSieve(const std::size_t& n) {
+  if (n == 0ULL) {
+    throw std::range_error("Argument must be greater than zero");
+  }
   std::vector<bool> is_prime(n + 1, true);
   is_prime[0] = is_prime[1] = false;
   for (std::size_t i = 2; i * i <= n; ++i) {
