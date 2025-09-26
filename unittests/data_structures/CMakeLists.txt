@@ -6,18 +6,16 @@ list(APPEND EXECUTABLES test_segment_tree)
 
 if(CMAKE_BUILD_TYPE STREQUAL Release)
   message(STATUS "RELEASE BUILD TYPE")
-  foreach(executable IN ZIP_LISTS ${EXECUTABLES})
-    target_compile_options(executable
+  foreach(executable IN LISTS EXECUTABLES)
+    target_compile_options(${executable}
                            PUBLIC ${GCC_RELEASE_BUILD_TYPE_COMPILE_FLAGS})
   endforeach()
-  target_compile_options(test_segment_tree
-                         PUBLIC ${GCC_RELEASE_BUILD_TYPE_COMPILE_FLAGS})
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
   message(STATUS "DEBUG BUILD TYPE")
-  foreach(executable IN ZIP_LISTS ${EXECUTABLES})
-    target_compile_options(executable
+  foreach(executable IN LISTS EXECUTABLES)
+    target_compile_options(${executable}
                            PUBLIC ${GCC_DEBUG_BUILD_TYPE_COMPILE_FLAGS})
   endforeach()
 endif()
