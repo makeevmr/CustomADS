@@ -1,5 +1,3 @@
 set(ALGO_DIR algorithms)
-set(DS_DIR data_structures)
 
 add_subdirectory(${ALGO_DIR})
-add_subdirectory(${DS_DIR})

@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(SOURCE_DIR "src/")
-set(UNITTESTS_DIR "unittests/")
+set(SOURCE_DIR src)
+set(UNITTESTS_DIR unittests)
 
 set(CMAKE_CXX_FLAGS_RELEASE "")
 set(CMAKE_CXX_FLAGS_DEBUG "")
@@ -37,6 +37,7 @@ list(
   -Wsign-promo)
 
 include_directories(${SOURCE_DIR})
+add_subdirectory(${SOURCE_DIR})
 
 # tests
 enable_testing()
