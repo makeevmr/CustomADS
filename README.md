@@ -1,6 +1,6 @@
 # CustomDS
 
-My implementation of widely used data structures
+My implementation of widely used algorithms and data structures
 
 ## Run tests
 
