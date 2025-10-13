@@ -21,7 +21,8 @@ public:
   using occurrences = std::vector<OccurrenceInfo>;
 
   AhoCorasickAutomata()
-      : next_str_num_(0),
+      : is_built_(false),
+        next_str_num_(0),
         nodes_(std::vector<Node>(1)) {}
 
   void addString(const std::string& s) {
@@ -30,6 +31,7 @@ public:
       const std::size_t symbol_ind =
           static_cast<std::size_t>(symbol - kAlphaLeft);
       if (nodes_[curr_node].next_[symbol_ind] == kUndefinedFlag) {
+        is_built_ = false;
         nodes_[curr_node].next_[symbol_ind] = nodes_.size();
         nodes_.emplace_back();
       }
@@ -37,11 +39,15 @@ public:
     }
     nodes_[curr_node].is_terminal_ = true;
     nodes_[curr_node].str_num_ = next_str_num_++;
+    nodes_[curr_node].str_size_ = s.size();
   }
 
   // Return pairs[index of end position of string in text, string index]
   [[nodiscard]] occurrences findAllOccurrences(const std::string& text) {
-    buildAutomata();
+    if (!is_built_) {
+      buildAutomata();
+      is_built_ = true;
+    }
     std::size_t curr_node = 0;
     std::vector<OccurrenceInfo> occurences;
     const std::size_t text_size = text.size();
@@ -50,9 +56,10 @@ public:
       std::size_t traverse_back_node = curr_node;
       do {
         if (nodes_[traverse_back_node].is_terminal_) {
-          occurences.push_back(
-              OccurrenceInfo{.str_end_pos_ = i,
-                             .str_num_ = nodes_[traverse_back_node].str_num_});
+          occurences.push_back(OccurrenceInfo{
+              .str_start_pos_ =
+                  ((i + 1) - nodes_[traverse_back_node].str_size_),
+              .str_num_ = nodes_[traverse_back_node].str_num_});
         }
         traverse_back_node = nodes_[traverse_back_node].to_terminal_link_;
       } while (traverse_back_node != kNoPathFlag);
@@ -112,6 +119,7 @@ private:
   struct Node {
     bool is_terminal_;
     std::size_t str_num_;
+    std::size_t str_size_;
     std::size_t suffix_link_;
     std::size_t to_terminal_link_;
     std::size_t next_[kAlphaSize];
@@ -126,10 +134,11 @@ private:
   };
 
   struct OccurrenceInfo {
-    std::size_t str_end_pos_;
+    std::size_t str_start_pos_;
     std::size_t str_num_;
   };
 
+  bool is_built_;
   std::size_t next_str_num_;
   std::vector<Node> nodes_;
 };
