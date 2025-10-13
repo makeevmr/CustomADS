@@ -1,5 +1,5 @@
-list(APPEND DIR_NAMES segment_tree)
-list(APPEND EXECUTABLE_NAMES test_segment_tree)
+list(APPEND DIR_NAMES aho_corasick_automata segment_tree)
+list(APPEND EXECUTABLE_NAMES test_aho_corasick_automata test_segment_tree)
 
 foreach(exec_name dir_name IN ZIP_LISTS EXECUTABLE_NAMES DIR_NAMES)
   add_executable(${exec_name} ${dir_name}/${exec_name}.cpp)
