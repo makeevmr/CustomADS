@@ -25,6 +25,7 @@ cmake --build . --target test_segment_tree
 - `test_sieve_of_eratosthenes`
 
 ### Data structures
+- `test_aho_corasick_automata`
 - `test_segment_tree`
 
 ## Executable paths
@@ -33,4 +34,5 @@ cmake --build . --target test_segment_tree
 - `./unittests/algorithms/test_sieve_of_eratosthenes`
 
 ### Data structures
+- `./unittests/data_structures/test_aho_corasick_automata`
 - `./unittests/data_structures/test_segment_tree`
