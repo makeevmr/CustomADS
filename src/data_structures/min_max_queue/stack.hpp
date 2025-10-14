@@ -11,45 +11,11 @@ namespace ads {
 // Stack implementation with T* dynamic array
 template <typename T>
 class Stack {
-private:
+public:
   using reference = T&;
   using const_reference = const T&;
   using size_type = std::size_t;
 
-  T* data_;
-  size_type size_;
-  size_type capacity_;
-
-  void swap(Stack<T>& other) noexcept {
-    std::swap(data_, other.data_);
-    std::swap(size_, other.size_);
-    std::swap(capacity_, other.capacity_);
-  }
-
-  static void free(T* data_to_free, size_type destructor_calls) noexcept {
-    if (!std::is_trivially_destructible_v<T>) {
-      size_type destroyed_objects = 0;
-      while (destroyed_objects < destructor_calls) {
-        (data_to_free + destroyed_objects)->~T();
-        ++destroyed_objects;
-      }
-    }
-    ::operator delete(data_to_free);
-  }
-
-  static void uninitializedCopy(T* copy_to, const Stack<T>& copy_from) {
-    size_type copied_objects = 0;
-    try {
-      for (; copied_objects < copy_from.size_; ++copied_objects) {
-        new (copy_to + copied_objects) T(copy_from.data_[copied_objects]);
-      }
-    } catch (...) {
-      free(copy_to, copied_objects);
-      throw;
-    }
-  }
-
-public:
   explicit Stack(const size_type& capacity = 100)
       : data_(reinterpret_cast<T*>(::operator new(sizeof(T) * capacity))),
         size_(0),
@@ -114,6 +80,7 @@ public:
   }
 
   // Necessary for efficient implementation of a queue on 2 stacks
+  // TODO: consider refactor this method (maybe make it private)
   [[nodiscard]] reference bottom() {
     if (size_ == 0) {
       throw std::length_error("Empty stack");
@@ -200,6 +167,40 @@ public:
       }
     }
   };
+
+private:
+  void swap(Stack<T>& other) noexcept {
+    std::swap(data_, other.data_);
+    std::swap(size_, other.size_);
+    std::swap(capacity_, other.capacity_);
+  }
+
+  static void free(T* data_to_free, size_type destructor_calls) noexcept {
+    if (!std::is_trivially_destructible_v<T>) {
+      size_type destroyed_objects = 0;
+      while (destroyed_objects < destructor_calls) {
+        (data_to_free + destroyed_objects)->~T();
+        ++destroyed_objects;
+      }
+    }
+    ::operator delete(data_to_free);
+  }
+
+  static void uninitializedCopy(T* copy_to, const Stack<T>& copy_from) {
+    size_type copied_objects = 0;
+    try {
+      for (; copied_objects < copy_from.size_; ++copied_objects) {
+        new (copy_to + copied_objects) T(copy_from.data_[copied_objects]);
+      }
+    } catch (...) {
+      free(copy_to, copied_objects);
+      throw;
+    }
+  }
+
+  T* data_;
+  size_type size_;
+  size_type capacity_;
 };
 
 // Specialization for a problem condition

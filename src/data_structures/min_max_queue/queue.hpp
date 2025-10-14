@@ -8,16 +8,11 @@ namespace ads {
 // Queue implementation using two stacks
 template <typename T>
 class Queue {
-private:
+public:
   using reference = T&;
   using const_reference = const T&;
   using size_type = std::size_t;
 
-  size_type size_;
-  Stack<T> push_stack_;
-  Stack<T> pop_stack_;
-
-public:
   explicit Queue(const size_type& capacity)
       : size_(0),
         push_stack_(Stack<T>(capacity)),
@@ -104,20 +99,20 @@ public:
     push_stack_.push(value);
     ++size_;
   }
+
+private:
+  size_type size_;
+  Stack<T> push_stack_;
+  Stack<T> pop_stack_;
 };
 
 template <>
 class Queue<MinMaxNode> {
-private:
+public:
   using reference = MinMaxNode&;
   using const_reference = const MinMaxNode&;
   using size_type = std::size_t;
 
-  size_type size_;
-  Stack<MinMaxNode> push_stack_;
-  Stack<MinMaxNode> pop_stack_;
-
-public:
   explicit Queue(const size_type& capacity)
       : size_(0),
         push_stack_(Stack<MinMaxNode>(capacity)),
@@ -241,6 +236,11 @@ public:
     pop_stack_.resize(new_capacity);
     push_stack_.resize(new_capacity);
   }
+
+private:
+  size_type size_;
+  Stack<MinMaxNode> push_stack_;
+  Stack<MinMaxNode> pop_stack_;
 };
 
 }  // namespace ads
