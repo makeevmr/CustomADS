@@ -37,6 +37,7 @@ list(
   -Wsign-promo)
 
 include_directories(${SOURCE_DIR})
+include_directories(${UNITTESTS_DIR})
 add_subdirectory(${SOURCE_DIR})
 
 # tests

@@ -1,5 +1,5 @@
-list(APPEND DIR_NAMES sieve_of_eratosthenes)
-list(APPEND EXECUTABLE_NAMES test_sieve_of_eratosthenes)
+list(APPEND DIR_NAMES kmp sieve_of_eratosthenes)
+list(APPEND EXECUTABLE_NAMES test_kmp test_sieve_of_eratosthenes)
 
 foreach(exec_name dir_name IN ZIP_LISTS EXECUTABLE_NAMES DIR_NAMES)
   add_executable(${exec_name} ${dir_name}/${exec_name}.cpp)
