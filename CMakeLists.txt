@@ -36,6 +36,10 @@ list(
   -Wsign-conversion
   -Wsign-promo)
 
+# executable names for unittests
+list(APPEND ALGO_DIR_NAMES euclidean kmp sieve_of_eratosthenes)
+list(APPEND DS_DIR_NAMES aho_corasick_automata segment_tree)
+
 include_directories(${SOURCE_DIR})
 include_directories(${UNITTESTS_DIR})
 add_subdirectory(${SOURCE_DIR})
