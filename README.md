@@ -22,6 +22,7 @@ cmake --build . --target test_segment_tree
 ## Unittest targets
 
 ### Algorithms
+- `test_euclidean`
 - `test_kmp`
 - `test_sieve_of_eratosthenes`
 
@@ -32,6 +33,7 @@ cmake --build . --target test_segment_tree
 ## Executable paths
 
 ### Algorithms
+- `./unittests/algorithms/test_euclidean`
 - `./unittests/algorithms/test_kmp`
 - `./unittests/algorithms/test_sieve_of_eratosthenes`
 
