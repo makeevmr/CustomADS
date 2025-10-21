@@ -19,4 +19,6 @@ CompileFlags:
     -Wredundant-decls,
     -Wsign-conversion,
     -Wsign-promo,
+    --stdlib=libc++,
+    # --stdlib=libstdc++,
   ]
